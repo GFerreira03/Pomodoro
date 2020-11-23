@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pinkyWhite"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/back_timer"
+        android:layout_width="270dp"
+        android:layout_height="270dp"
+        android:layout_below="@id/cloudsImg"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="36dp"
+        android:src="@drawable/timer_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cloudsImg"
+        app:layout_constraintVertical_bias="0.04" />
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/ubuntu_bold"
+        android:text="25:00"
+
+        android:textColor="@color/blueGray"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="@+id/back_timer"
+        app:layout_constraintEnd_toEndOf="@+id/back_timer"
+        app:layout_constraintHorizontal_bias="0.449"
+        app:layout_constraintStart_toStartOf="@+id/back_timer"
+        app:layout_constraintTop_toTopOf="@+id/back_timer"
+        app:layout_constraintVertical_bias="0.454" />
+
+    <TextView
+        android:id="@+id/pomodoroCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timer"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/ubuntu_bold"
+        android:text="Pomodoros: 0"
+        android:textColor="@color/blueGray"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/timer"
+        app:layout_constraintStart_toStartOf="@+id/timer"
+        app:layout_constraintTop_toBottomOf="@+id/timer" />
+
+    <ImageView
+        android:id="@+id/cloudsImg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+
+        android:src="@drawable/top_menu_cloud"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageButton
+        android:id="@+id/configBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cloudsImg"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:background="@null"
+        android:src="@drawable/config"
+        app:layout_constraintBottom_toTopOf="@+id/back_timer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/back_timer"
+        app:layout_constraintTop_toBottomOf="@+id/cloudsImg"
+        />
+
+    <TextView
+        android:id="@+id/shortTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ubuntu_bold"
+        android:text="Descanso\ncurto"
+        android:textAlignment="center"
+        android:textColor="@color/lightGray"
+        app:layout_constraintBottom_toBottomOf="@+id/cloudsImg"
+        app:layout_constraintEnd_toStartOf="@+id/pomodoroTxt"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/cloudsImg"
+        app:layout_constraintVertical_bias="0.425" />
+
+    <TextView
+        android:id="@+id/pomodoroTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ubuntu_bold"
+        android:text="Pomodoro"
+        android:textAlignment="center"
+        android:textColor="@color/lightRed"
+        app:layout_constraintBottom_toBottomOf="@+id/shortTxt"
+        app:layout_constraintEnd_toStartOf="@+id/longTxt"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/shortTxt"
+        app:layout_constraintTop_toTopOf="@+id/shortTxt" />
+
+    <TextView
+        android:id="@+id/longTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ubuntu_bold"
+        android:text="Descanso\nlongo"
+        android:textAlignment="center"
+        android:textColor="@color/lightGray"
+        app:layout_constraintBottom_toBottomOf="@+id/shortTxt"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toEndOf="@+id/pomodoroTxt"
+        app:layout_constraintTop_toTopOf="@+id/shortTxt"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/startBtn"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/back_timer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/start_btn_idle"
+        android:fontFamily="@font/ubuntu_bold"
+        android:text="Iniciar"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/resetBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back_timer"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <Button
+        android:id="@+id/resetBtn"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/startBtn"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/reset_btn_idle"
+        android:fontFamily="@font/ubuntu_bold"
+        android:text="Reiniciar"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/startBtn"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/startBtn"
+        app:layout_constraintTop_toBottomOf="@+id/startBtn" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.08" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.919708" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="-80dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="-50dp" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="left" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="-88dp" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="-126dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

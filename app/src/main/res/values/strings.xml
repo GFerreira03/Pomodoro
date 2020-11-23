@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Pomodoro</string>
+
+    <string-array name="alarm_sounds">
+        <item>Kabuki</item>
+        <item>End Game</item>
+    </string-array>
+</resources>
