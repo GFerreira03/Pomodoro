@@ -21,11 +21,12 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-	private static final long POMODORO_TIME = 1500000; //1500000
+	private static final long POMODORO_TIME = 5000; //1500000
 	private static final long SHORT_BREAK = 300000; //300000
 	private static final long LONG_BREAK = 1800000; //1800000
 
     public int[] sound;
+    public int alarm;
 
     private long timeLeft;
 
@@ -58,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         shortBreakTxt = findViewById(R.id.shortTxt);
         longBreakTxt = findViewById(R.id.longTxt);
 
+        if (alarm == 0){
+            alarm = R.raw.kabuki;
+        }
+        
 		startButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -122,6 +127,11 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 isCounting = false;
                 restTime = !restTime;
+                try {
+                    playSound(alarm);
+                } catch (Exception e){
+                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                }
             }
         }.start();
 	}
@@ -177,34 +187,11 @@ public class MainActivity extends AppCompatActivity {
 
         configDialog
                 .setTitle("Selecionar som")
-                .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                })
                 .setSingleChoiceItems(items, selItem, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        switch (i){
-                            case DialogInterface.BUTTON_POSITIVE :
-                                //Do your stuffs
-                                dialogInterface.dismiss();
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                //Do your stuffs
-                                dialogInterface.dismiss();
-                                break;
-                            default: //Single choice item selected
-                                playSound(sound[i]);
-                                break;
-                        }
+                        playSound(sound[i]);
+                        alarm = sound[i];
                     }
                 })
                 .create()
@@ -219,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer = MediaPlayer.create(this,res);
             mediaPlayer.start();
         }
-
     }
 
 }
