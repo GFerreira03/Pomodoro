@@ -4,7 +4,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -24,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
 	private static final long POMODORO_TIME = 5000; //1500000
 	private static final long SHORT_BREAK = 300000; //300000
 	private static final long LONG_BREAK = 1800000; //1800000
+
+    public static final String ALARM_KEY = "alarm";
+    public static final String TEXT = "text";
 
     public int[] sound;
     public int alarm;
@@ -207,5 +212,12 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer.start();
         }
     }
+    
+    private void saveSound (){
+	    SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+	    SharedPreferences.Editor editor = sharedPreferences.edit();
 
+	    editor.putInt(ALARM_KEY, alarm);
+	    editor.apply();
+    }
 }
