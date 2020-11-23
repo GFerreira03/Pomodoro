@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -22,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 	private static final long SHORT_BREAK = 300000; //300000
 	private static final long LONG_BREAK = 1800000; //1800000
 
-
+    public int[] sound;
 
     private long timeLeft;
 
@@ -33,12 +36,16 @@ public class MainActivity extends AppCompatActivity {
 	private TextView timerTxt, pomodoroCountTxt;
 	private TextView shortBreakTxt, longBreakTxt, pomodoroTxt;
 
+    MediaPlayer mediaPlayer;
+    SoundPool soundPool;
     CountDownTimer timer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		soundPool = new SoundPool(2, AudioManager.STREAM_ALARM, 0);
 
 		timerTxt = findViewById(R.id.timer);
 		pomodoroCountTxt = findViewById(R.id.pomodoroCount);
@@ -163,9 +170,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configDialog(){
-        ConfigDialog configDialog = new ConfigDialog();
-        configDialog.show(getSupportFragmentManager(), "Config dialog");
+        final CharSequence[] items = {"Kabuki", "End game"};
+        sound = new int[]{R.raw.kabuki, R.raw.end_game};
+        int selItem = 0;
+        AlertDialog.Builder configDialog = new AlertDialog.Builder(this);
+
+        configDialog
+                .setTitle("Selecionar som")
+                .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setSingleChoiceItems(items, selItem, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        switch (i){
+                            case DialogInterface.BUTTON_POSITIVE :
+                                //Do your stuffs
+                                dialogInterface.dismiss();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //Do your stuffs
+                                dialogInterface.dismiss();
+                                break;
+                            default: //Single choice item selected
+                                playSound(sound[i]);
+                                break;
+                        }
+                    }
+                })
+                .create()
+                .show();
     }
 
+    private void playSound(int res) {
+	    if (mediaPlayer == null){
+            mediaPlayer = MediaPlayer.create(this,res);
+        } else {
+            mediaPlayer.reset();
+            mediaPlayer = MediaPlayer.create(this,res);
+            mediaPlayer.start();
+        }
+
+    }
 
 }
