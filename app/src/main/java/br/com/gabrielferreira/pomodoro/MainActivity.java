@@ -3,7 +3,6 @@ package br.com.gabrielferreira.pomodoro;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -24,11 +23,11 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
 	private static final long POMODORO_TIME = 5000; //1500000
-	private static final long SHORT_BREAK = 300000; //300000
-	private static final long LONG_BREAK = 1800000; //1800000
+	private static final long SHORT_BREAK = 5000; //300000
+	private static final long LONG_BREAK = 5000; //1800000
 
     public static final String ALARM_KEY = "alarm";
-    public static final String TEXT = "text";
+    public static final String DEFAULT_START = "defaultStart";
 
     public int[] sound;
     public int alarm;
@@ -45,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     SoundPool soundPool;
     CountDownTimer timer;
+
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +64,8 @@ public class MainActivity extends AppCompatActivity {
         pomodoroTxt = findViewById(R.id.pomodoroTxt);
         shortBreakTxt = findViewById(R.id.shortTxt);
         longBreakTxt = findViewById(R.id.longTxt);
-
-        if (alarm == 0){
-            alarm = R.raw.kabuki;
-        }
+        SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        alarm = sharedPreferences.getInt(ALARM_KEY, (int) R.raw.kabuki);
         
 		startButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 		resetButton.setOnClickListener(new View.OnClickListener(){
 		    @Override
             public void onClick(View view) {
-		        confirmDialog();
+		        resetDialog();
             }
         });
 
@@ -121,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
      * Controla o timer.
      */
 	private void startTimer(){
+	    mediaPlayer.stop();
         timer = new CountDownTimer(timeLeft, 1000) {
             @Override
             public void onTick(long l) {
@@ -164,7 +164,10 @@ public class MainActivity extends AppCompatActivity {
         pomodoroCountTxt.setText(String.format(Locale.getDefault(),"Pomodoro: 0"));
     }
 
-    private void confirmDialog(){
+    /**
+     * Inicia e gerencia o a caixa de diálogo de confirmação do reinício da contagem.
+     */
+    private void resetDialog(){
         final AlertDialog.Builder confirmBox = new AlertDialog.Builder(this);
         confirmBox.setTitle("Reiniciar");
         confirmBox.setMessage("Ao tocar em sim, a contagem reiniciará. Deseja continuar?");
@@ -184,10 +187,14 @@ public class MainActivity extends AppCompatActivity {
         confirmBox.show();
     }
 
+    /**
+     * Abre e gerencia a caixa de diálogo de mudança de música.
+     */
     private void configDialog(){
         final CharSequence[] items = {"Kabuki", "End game"};
         sound = new int[]{R.raw.kabuki, R.raw.end_game};
-        int selItem = 0;
+        SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        int selItem = sharedPreferences.getInt(DEFAULT_START, 0);
         AlertDialog.Builder configDialog = new AlertDialog.Builder(this);
 
         configDialog
@@ -197,24 +204,44 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         playSound(sound[i]);
                         alarm = sound[i];
+                        SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(DEFAULT_START, i);
+                        editor.apply();
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        saveSound();
+                        mediaPlayer.stop();
                     }
                 })
                 .create()
                 .show();
     }
 
+    /**
+     * Inicia a música selecionada
+     * @param res
+     * Recurso de áudio a ser iniciado.
+     */
     private void playSound(int res) {
 	    if (mediaPlayer == null){
             mediaPlayer = MediaPlayer.create(this,res);
+            mediaPlayer.start();
         } else {
             mediaPlayer.reset();
             mediaPlayer = MediaPlayer.create(this,res);
             mediaPlayer.start();
         }
     }
-    
+
+    /**
+     * Salva a música selecionada no aparelho.
+     */
     private void saveSound (){
-	    SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
 	    SharedPreferences.Editor editor = sharedPreferences.edit();
 
 	    editor.putInt(ALARM_KEY, alarm);
