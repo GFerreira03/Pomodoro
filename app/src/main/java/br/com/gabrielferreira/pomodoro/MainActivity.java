@@ -22,9 +22,9 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-	private static final long POMODORO_TIME = 5000; //1500000
-	private static final long SHORT_BREAK = 5000; //300000
-	private static final long LONG_BREAK = 5000; //1800000
+	private static final long POMODORO_TIME = 1500000; //1500000
+	private static final long SHORT_BREAK = 300000; //300000
+	private static final long LONG_BREAK = 1800000; //1800000
 
     public static final String ALARM_KEY = "alarm";
     public static final String DEFAULT_START = "defaultStart";
