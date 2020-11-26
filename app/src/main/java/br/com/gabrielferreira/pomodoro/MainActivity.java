@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
     SoundPool soundPool;
     CountDownTimer timer;
 
-
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -120,7 +118,9 @@ public class MainActivity extends AppCompatActivity {
      * Controla o timer.
      */
 	private void startTimer(){
-	    mediaPlayer.stop();
+	    if (mediaPlayer != null)
+	        mediaPlayer.stop();
+
         timer = new CountDownTimer(timeLeft, 1000) {
             @Override
             public void onTick(long l) {
