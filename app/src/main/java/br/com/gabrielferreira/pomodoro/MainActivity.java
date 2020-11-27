@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     SoundPool soundPool;
     CountDownTimer timer;
-
+    Button resetButton;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 		pomodoroCountTxt = findViewById(R.id.pomodoroCount);
 
         Button startButton = findViewById(R.id.startBtn);
-        Button resetButton = findViewById(R.id.resetBtn);
+        resetButton = findViewById(R.id.resetBtn);
         ImageButton configButton = findViewById(R.id.configBtn);
 
         pomodoroTxt = findViewById(R.id.pomodoroTxt);
@@ -64,10 +64,11 @@ public class MainActivity extends AppCompatActivity {
         longBreakTxt = findViewById(R.id.longTxt);
         SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
         alarm = sharedPreferences.getInt(ALARM_KEY, (int) R.raw.kabuki);
-        
+        resetButton.setEnabled(false);
 		startButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
+                resetButton.setEnabled(true);
 			    if (!isCounting){
                     isCounting = true;
                     if (!restTime) {
@@ -132,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 isCounting = false;
                 restTime = !restTime;
+                resetButton.setEnabled(false);
                 try {
                     playSound(alarm);
                 } catch (Exception e){
@@ -160,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
 	    isCounting = false;
 	    restTime = false;
         pomodoroCount = 0;
+        resetButton.setEnabled(false);
         timerTxt.setText(String.format(Locale.getDefault(),"25:00"));
         pomodoroCountTxt.setText(String.format(Locale.getDefault(),"Pomodoro: 0"));
     }
