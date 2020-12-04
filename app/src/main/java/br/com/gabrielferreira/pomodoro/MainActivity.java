@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -30,7 +31,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-	private static final long POMODORO_TIME = 5000; //1500000
+	private static final long POMODORO_TIME = 1500000; //1500000
 	private static final long SHORT_BREAK = 300000; //300000
 	private static final long LONG_BREAK = 1800000; //1800000
 
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         shortBreakTxt = findViewById(R.id.shortTxt);
         longBreakTxt = findViewById(R.id.longTxt);
         SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
-        alarm = sharedPreferences.getInt(ALARM_KEY, (int) R.raw.kabuki);
+        alarm = sharedPreferences.getInt(ALARM_KEY, R.raw.kabuki);
         resetButton.setEnabled(false);
         resetButton.setVisibility(View.INVISIBLE);
 
@@ -170,15 +171,16 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Reseta o contador e o texto.
      */
-	private void resetTimer(){
+	@SuppressLint("SetTextI18n")
+    private void resetTimer(){
 	    timer.cancel();
 	    isCounting = false;
 	    restTime = false;
         pomodoroCount = 0;
         resetButton.setEnabled(false);
         resetButton.setVisibility(View.INVISIBLE);
-        timerTxt.setText(String.format(Locale.getDefault(),"25:00"));
-        pomodoroCountTxt.setText(String.format(Locale.getDefault(),"Pomodoro: 0"));
+        timerTxt.setText("25:00");
+        pomodoroCountTxt.setText("Pomodoro: 0");
     }
 
     /**
