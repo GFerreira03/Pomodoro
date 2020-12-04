@@ -2,14 +2,21 @@ package br.com.gabrielferreira.pomodoro;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -18,11 +25,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-	private static final long POMODORO_TIME = 1500000; //1500000
+	private static final long POMODORO_TIME = 5000; //1500000
 	private static final long SHORT_BREAK = 300000; //300000
 	private static final long LONG_BREAK = 1800000; //1800000
 
@@ -65,10 +73,13 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
         alarm = sharedPreferences.getInt(ALARM_KEY, (int) R.raw.kabuki);
         resetButton.setEnabled(false);
+        resetButton.setVisibility(View.INVISIBLE);
+
 		startButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
                 resetButton.setEnabled(true);
+                resetButton.setVisibility(View.VISIBLE);
 			    if (!isCounting){
                     isCounting = true;
                     if (!restTime) {
@@ -133,9 +144,11 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 isCounting = false;
                 restTime = !restTime;
-                resetButton.setEnabled(false);
+
                 try {
                     playSound(alarm);
+                    createNotificationChannel();
+                    notificationStart();
                 } catch (Exception e){
                     Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
                 }
@@ -163,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
 	    restTime = false;
         pomodoroCount = 0;
         resetButton.setEnabled(false);
+        resetButton.setVisibility(View.INVISIBLE);
         timerTxt.setText(String.format(Locale.getDefault(),"25:00"));
         pomodoroCountTxt.setText(String.format(Locale.getDefault(),"Pomodoro: 0"));
     }
@@ -250,4 +264,25 @@ public class MainActivity extends AppCompatActivity {
 	    editor.putInt(ALARM_KEY, alarm);
 	    editor.apply();
     }
+
+    private void notificationStart(){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "alarmNotification")
+                .setSmallIcon(R.drawable.ic_alarm)
+                .setContentTitle("Alarme Pomodoro")
+                .setContentText("Ciclo finalizado")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity.this);
+        notificationManager.notify(1, builder.build());
+    }
+
+    private void createNotificationChannel (){
+        NotificationChannel channel = new NotificationChannel("alarmNotification", "alarm notification", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        manager.createNotificationChannel(channel);
+    }
+
+
 }
